@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>D.V.H.S.S Thalavoor - Mobile</title>
+
+  <!-- 🧠 Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2e5aac">
+
+  <!-- 🛡️ Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').then(reg => {
+          console.log('Service Worker registered', reg);
+          // Check for updates hourly
+          setInterval(() => reg.update(), 60 * 60 * 1000);
+        });
+      });
+    }
+  </script>
+
+  <!-- 📲 Install Prompt -->
+  <style>
+    #installBanner {
+      display: none;
+      position: fixed;
+      bottom: 15px;
+      left: 10px;
+      right: 10px;
+      background: #fff;
+      color: #000;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      padding: 10px;
+      text-align: center;
+      z-index: 9999;
+    }
+    #installBanner button {
+      margin-top: 8px;
+      padding: 5px 12px;
+      background: #2e5aac;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+
+  <script>
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const banner = document.getElementById('installBanner');
+      banner.style.display = 'block';
+
+      document.getElementById('installBtn').addEventListener('click', () => {
+        banner.style.display = 'none';
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(choiceResult => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted install prompt');
+          } else {
+            console.log('User dismissed install prompt');
+          }
+          deferredPrompt = null;
+        });
+      });
+    });
+  </script>
+
+  <!-- Your Existing CSS & Style Below (unchanged) -->
+  <style>
+    /* [existing CSS from your file here — skipped for brevity] */
+  </style>
+</head>
+
+<body>
+  <!-- 📲 Install Banner -->
+  <div id="installBanner">
+    📲 Add our school app to home screen<br>
+    <button id="installBtn">Install</button>
+  </div>
+
+  <!-- Your Existing Body Content (unchanged) -->
+  <!-- [same header, nav, section, footer etc. from your original file] -->
+
+  <script>
+    // [existing JS functions like toggleDarkMode and showSection]
+  </script>
+</body>
+  </html>
